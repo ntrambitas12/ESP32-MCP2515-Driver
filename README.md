@@ -242,7 +242,8 @@ For more information, please refer to [wiki page](http://www.seeedstudio.com/wik
 
 This software is written by loovee ([luweicong@seeed.cc](luweicong@seeed.cc "luweicong@seeed.cc")) for seeed studio
 Updated by Dmitry ([https://github.com/autowp](https://github.com/autowp "https://github.com/autowp"))
-Adapted for use on esp32/esp8266 by dedal.qq ([https://github.com/dedalqq](https://github.com/dedalqq "https://github.com/dedalqq"))
+Adapted for use on esp32/esp8266 by dedal.qq ([https://github.com/dedalqq](https://github.com/dedalqq "https://github.com/dedalqq")).
+Forked by ntrambitas12 and updated library to be easier to initialize for all ESP32 devices ([https://github.com/ntrambitas12](https://github.com/ntrambitas12 "https://github.com/ntrambitas12"))
 and is licensed under [The MIT License](http://opensource.org/licenses/mit-license.php). Check [LICENSE.md](LICENSE.md) for more information.
 
 Contributing to this software is warmly welcomed. You can do this basically by
