@@ -70,7 +70,7 @@ enum CAN_SPEED {
 Example of initialization
 
 ```C++
-MCP2515 mcp2515(&spi);
+MCP2515 mcp2515(uint8_t MOSI_PIN, uint8_t MISO_PIN, uint8_t SCLK_PIN, uint8_t CS_PIN); // Set here the MOSI, MISO, SCLK, and CS PINS where the MCP2515 device connects to the ESP32
 mcp2515.reset();
 mcp2515.setBitrate(CAN_125KBPS);
 mcp2515.setLoopbackMode();
@@ -92,13 +92,13 @@ enum CAN_CLOCK {
 };
 ```
 
-Default value is MCP_16MHZ
+The default value is MCP_16MHZ
 
-Note: To transfer data on high speed of CAN interface via UART dont forget to update UART baudrate as necessary.
+Note: To transfer data on high speed of CAN interface via UART don't forget to update UART baud rate as necessary.
 
 ## Frame data format
 
-Library uses Linux-like structure to store can frames;
+The library uses a Linux-like structure to store can frames;
 
 ```C++
 struct can_frame {
@@ -142,8 +142,8 @@ frame.can_dlc = 2;
 frame.data[0] = 0xFF;
 frame.data[1] = 0xFF;
 
-/* send out the message to the bus using second TX buffer and
-tell other devices this is a extended frame from 0x12345678. */
+/* send out the message to the bus using the second TX buffer and
+tell other devices this is an extended frame from 0x12345678. */
 mcp2515.sendMessage(MCP2515::TXB1, &frame);
 ```
 
@@ -158,9 +158,9 @@ MCP2515::ERROR readMessage(const MCP2515::RXBn rxbn, struct can_frame *frame);
 MCP2515::ERROR readMessage(struct can_frame *frame);
 ```
 
-In conditions that masks and filters have been set. This function can only get frames that meet the requirements of masks and filters.
+In conditions where masks and filters have been set. This function can only get frames that meet the requirements of masks and filters.
 
-You can choise one of two method to receive: interrupt-based and polling
+You can choose one of two methods to receive: interrupt-based and polling
 
 Example of poll read
 
