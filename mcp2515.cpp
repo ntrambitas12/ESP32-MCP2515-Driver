@@ -31,7 +31,7 @@ MCP2515::MCP2515(uint8_t MOSI_PIN, uint8_t MISO_PIN, uint8_t SCLK_PIN, uint8_t C
     spi_device_interface_config_t dev_config = {
         .mode = 0,                          // SPI mode 0
         .cs_ena_posttrans = 3,              // Keep CS low for a bit after transaction
-        .clock_speed_hz = 1000000,          // Clock speed: 1 MHz
+        .clock_speed_hz = 1 * 1000 * 1000,          // Clock speed: 1 MHz
         .spics_io_num = CS_PIN,             // Chip select pin
         .queue_size = 10,                    // Number of transactions to queue
     };
@@ -42,9 +42,9 @@ MCP2515::MCP2515(uint8_t MOSI_PIN, uint8_t MISO_PIN, uint8_t SCLK_PIN, uint8_t C
     assert(ret == ESP_OK);
 
     //Add the MCP2515 to the SPI bus
-    spi_device_handle_t MCP2515spi;
-    ret = spi_bus_add_device(HSPI_HOST, &dev_config, &MCP2515spi);
-    spi = &MCP2515spi;
+    spi_device_handle_t *MCP2515spi = (spi_device_handle_t*)malloc(sizeof(spi_device_handle_t));
+    ret = spi_bus_add_device(HSPI_HOST, &dev_config, MCP2515spi);
+    spi = MCP2515spi;
     assert(ret == ESP_OK);
 }
 
