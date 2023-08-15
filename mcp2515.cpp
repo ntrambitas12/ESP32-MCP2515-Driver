@@ -5,6 +5,8 @@
 
 #include "mcp2515.h"
 
+static bool spiBusIntialized = false;
+
 const struct MCP2515::TXBn_REGS MCP2515::TXB[MCP2515::N_TXBUFFERS] = {
     {MCP_TXB0CTRL, MCP_TXB0SIDH, MCP_TXB0DATA},
     {MCP_TXB1CTRL, MCP_TXB1SIDH, MCP_TXB1DATA},
@@ -18,14 +20,24 @@ const struct MCP2515::RXBn_REGS MCP2515::RXB[N_RXBUFFERS] = {
 
 MCP2515::MCP2515(uint8_t MOSI_PIN, uint8_t MISO_PIN, uint8_t SCLK_PIN, uint8_t CS_PIN)
 {
-    // Configure the SPI bus parameters
-    spi_bus_config_t bus_config = {
-        .mosi_io_num = MOSI_PIN,
-        .miso_io_num = MISO_PIN,
-        .sclk_io_num = SCLK_PIN,
-        .quadwp_io_num = -1,    // Not used
-        .quadhd_io_num = -1,    // Not used
-    };
+    esp_err_t ret;
+   
+    // Only Intilaize the SPI Bus Once!
+    if (!spiBusIntialized) {
+        // Configure the SPI bus parameters
+        spi_bus_config_t bus_config = {
+            .mosi_io_num = MOSI_PIN,
+            .miso_io_num = MISO_PIN,
+            .sclk_io_num = SCLK_PIN,
+            .quadwp_io_num = -1,    // Not used
+            .quadhd_io_num = -1,    // Not used
+        };
+        //Initialize the SPI bus
+        ret = spi_bus_initialize(HSPI_HOST, &bus_config, 1);
+        assert(ret == ESP_OK);
+        spiBusIntialized = true;
+    }
+
 
     // Configure the SPI device parameters
     spi_device_interface_config_t dev_config = {
@@ -36,10 +48,6 @@ MCP2515::MCP2515(uint8_t MOSI_PIN, uint8_t MISO_PIN, uint8_t SCLK_PIN, uint8_t C
         .queue_size = 10,                    // Number of transactions to queue
     };
 
-    //Initialize the SPI bus
-    esp_err_t ret;
-    ret = spi_bus_initialize(HSPI_HOST, &bus_config, 1);
-    assert(ret == ESP_OK);
 
     //Add the MCP2515 to the SPI bus
     spi_device_handle_t *MCP2515spi = (spi_device_handle_t*)malloc(sizeof(spi_device_handle_t));
